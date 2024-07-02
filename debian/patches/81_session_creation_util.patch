@@ -34,7 +34,7 @@ Forwarded: not-yet
  
  #include "config.h"
  #include "screen.h"
-@@ -796,3 +797,40 @@
+@@ -720,3 +721,40 @@
  }
  
  #endif

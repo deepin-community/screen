@@ -13,8 +13,4 @@ if [ "$1" = purge ]; then
   rmdir -p --ignore-fail-on-non-empty /lib/systemd/system
 fi
 
-if [ "$1" = disappear ]; then
-  remove-shell /usr/bin/screen || true
-fi
-
 #DEBHELPER#

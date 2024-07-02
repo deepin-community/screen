@@ -1,3 +1,82 @@
+screen (4.9.1-1) unstable; urgency=low
+
+  * Update upstream's PGP keys to sport the currently published keys.
+  * New upstream bugfix release 4.9.1.
+    + Refresh patches where needed.
+    + Drop 90_fix_man_page_bash_example.patch, applied upstream.
+    + Supports stop/parity bits on serial port. (Closes: #492741)
+    + Avoid zombies after shell exit. (Closes: #991715)
+    + [CVE-2023-24626] Fixes missing signal sending permission check on
+      failed query messages when running setuid or setgid.
+    + Multiple Unicode/UTF-8 fixes.
+
+ -- Axel Beckert <abe@debian.org>  Thu, 07 Sep 2023 00:10:56 +0200
+
+screen (4.9.0-4) unstable; urgency=medium
+
+  [ Aurelien Jarno ]
+  * Add patch to replace hardcoded Unicode wide character list with a
+    dynamic check based on the current glibc's Unicode wide character
+    knowledge. (Closes: #1027733)
+
+  [ Unit 193 ]
+  * Add patch from upstream bug report #62102 to support bracketed paste
+    mode and cursor-style manipulation in Screen v4 as well. (Closes:
+    #1019576)
+
+  [ Axel Beckert ]
+  * Declare compliance with Debian Policy 4.6.2. (No changes needed.)
+  * Bump packaging copyright years in debian/control. Thanks Lintian!
+  * Declare 60-screen-4.2.1-debian4.1.0-compatibility.patch as
+    debian-specific.
+
+ -- Axel Beckert <abe@debian.org>  Mon, 09 Jan 2023 04:56:37 +0100
+
+screen (4.9.0-3) unstable; urgency=medium
+
+  [ Helmut Grohne ]
+  * Update /etc/shells using dpkg triggers. (Closes: #1023318)
+
+  [ Axel Beckert ]
+  * Update Helmut's patch to use more debhelper style file installing.
+  * Drop lintian overrides for false positives fixed in Lintian.
+
+ -- Axel Beckert <abe@debian.org>  Sun, 13 Nov 2022 05:09:57 +0100
+
+screen (4.9.0-2) unstable; urgency=medium
+
+  * Add patch to fix bash example in man page. (LP: #1986839) Thanks to
+    Tired Sysadmin on Launchpad for the bug report and initial patch!
+  * Bracketize lintian overrides.
+  * Add lintian overrides for binary files in utf8encodings/.
+  * Declare compliance with Debian Policy 4.6.1. (No changes needed.)
+
+ -- Axel Beckert <abe@debian.org>  Wed, 24 Aug 2022 03:45:18 +0200
+
+screen (4.9.0-1) unstable; urgency=low
+
+  * Update debian/upstream/signing-key.asc with upstream PGP keys from
+    https://savannah.gnu.org/project/memberlist-gpgkeys.php?group=screen
+    + Remove C714ACA0297D9992 (Micah Cowan)
+    + Replace 21F968DEF747ABD7 with 933AD21886F69FBF (Alexander Naumov)
+    + Keep B708A383C53EF3A4 (Amadeusz Sławiński)
+  * Import new upstream release 4.9.0.
+    + Drop the following patches which were all applied upstream:
+      - 52fix_screen_utf8_nfd.patch
+      - 58-show-encoding-hardstatus.patch
+      - 64-fix-manpage-typos-reported-by-lintian.patch
+      - 90_Expand-d_xtermosc-array-in-struct-display.patch
+      - 91_TERMCAP_BUF-is-used-in-place-of-TERMCAP_BUFSIZE.patch
+      - 99_CVE-2021-26937.patch
+    + Refresh the remaining patches as needed.
+  * debian/copyright: Update copyright years based on section COPYLEFT in
+    screen(1). Also update packaging copyright years. Thanks Lintian!
+  * Update lintian overrides wrt. to new tag formatting.
+  * Add lintian overrides for new very-long-line-length-in-source-file
+    false positives.
+
+ -- Axel Beckert <abe@debian.org>  Wed, 02 Feb 2022 04:38:15 +0100
+
 screen (4.8.0-7) unstable; urgency=medium
 
   * Replace versioned build-dependency on transitional package

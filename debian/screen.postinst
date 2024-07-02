@@ -30,8 +30,6 @@ if [ "$1" = configure ]; then
   if [ ! -e $servicefile ]; then
       ln -s /dev/null $servicefile
   fi
-
-  add-shell /usr/bin/screen || true
 fi
 
 #DEBHELPER#

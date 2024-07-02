@@ -5,7 +5,7 @@ Bug-Debian: https://bugs.debian.org/819781
 
 --- a/configure.ac
 +++ b/configure.ac
-@@ -844,6 +844,8 @@
+@@ -933,6 +933,8 @@
  ],
  [int x = DEAD_PROCESS; pututline((struct utmp *)0); getutent();], AC_DEFINE(GETUTENT), LIBS="$olibs")
  )
@@ -14,7 +14,7 @@ Bug-Debian: https://bugs.debian.org/819781
  AC_CHECKING(ut_host)
  AC_TRY_COMPILE([
  #include <time.h>
-@@ -860,6 +862,7 @@
+@@ -949,6 +951,7 @@
    AC_DEFINE(HAVE_UTEMPTER)
    LIBS="$LIBS -lutempter"
  fi
