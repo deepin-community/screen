@@ -514,7 +514,7 @@ int main(int ac, char** av)
   logreopen_register(lf_secreopen);
 
   av0 = *av;   /* if this is a login screen, assume -RR */
-  if (*av0 == '-') {
+  if (av0 && *av0 == '-') {
     rflag = 4;
 #ifdef MULTI
     xflag = 1;
@@ -778,6 +778,10 @@ int main(int ac, char** av)
               if (--ac == 0)
                 exit_with_usage(myname, "Specify session-name with -S", NULL);
               SockMatch = *++av;
+              debug1("SockMatch: '%s'\n", SockMatch);
+              debug1("SockMatch len: '%d'\n", (int)strlen(SockMatch));
+              if (strlen(SockMatch) > 80)
+                exit_with_usage(myname, "Session-name is too long (max length is 80 symbols)", NULL);
             }
             if (!*SockMatch)
               exit_with_usage(myname, "Empty session-name?", NULL);
@@ -1191,11 +1195,25 @@ int main(int ac, char** av)
     eexit(0);
   }
   signal(SIG_BYE, AttacherFinit);	/* prevent races */
+
   if (cmdflag) {
+
+#ifdef MULTIUSER
+    if (multi)
+      real_uid = multi_uid;
+#endif
+
     /* attach_tty is not mandatory */
     SetTtyname(false, &st);
     if (!*av)
       Panic(0, "Please specify a command.");
+    if (!strncmp("sessionname", *av, 11)) {
+      if (!*++av)
+        Panic(0, "Please specify a parameter.");
+      if (strlen(*av) > 80)
+        Panic(0, "Parameter of command 'sessionname' is too long.");
+      --av;
+    }
     SET_GUID();
     SendCmdMessage(sty, SockMatch, av, queryflag >= 0);
     exit(0);
@@ -1506,7 +1524,7 @@ int wstat_valid;
     killit = 1;
 
   if (ZombieKey_destroy && !killit) {
-    char buf[100], *s, reason[100];
+    char buf[200], *s, reason[100];
     time_t now;
 
     if (wstat_valid) {
@@ -1853,7 +1871,7 @@ void Hangup()
 {
   if (display == 0)
     return;
-  debug1("Hangup %x\n", display);
+  debug1("Hangup %lx\n", (long)display);
   if (D_userfd >= 0) {
     close(D_userfd);
     D_userfd = -1;
@@ -1997,7 +2015,7 @@ void Detach(int mode)
   }
 
   pid = D_userpid;
-  debug2("display: %#x displays: %#x\n", (unsigned int)display, (unsigned int)displays);
+  debug2("display: %#lx displays: %#lx\n", (long)display, (long)displays);
   FreeDisplay();
 
   if (displays == 0) /* Flag detached-ness */
@@ -2086,7 +2104,7 @@ DEFINE_VARARGS_FN(Msg)
   char buf[MAXPATHLEN*2];
   PROCESS_MESSAGE(buf);
 
-  debug2("Msg('%s') (%#x);\n", buf, (unsigned int)display);
+  debug2("Msg('%s') (%#lx);\n", buf, (long)display);
 
   if (display && displays)
     MakeStatus(buf);
@@ -2119,7 +2137,7 @@ DEFINE_VARARGS_FN(Panic)
   char buf[MAXPATHLEN*2];
   PROCESS_MESSAGE(buf);
 
-  debug3("Panic('%s'); display=%x displays=%x\n", buf, display, displays);
+  debug3("Panic('%s'); display=%lx displays=%lx\n", buf, (long)display, (long)displays);
   if (displays == 0 && display == 0) {
     printf("%s\r\n", buf);
     if (PanicPid)
@@ -2711,12 +2729,11 @@ char *MakeWinMsgEv(char *str, struct win *win, int esc, int padlen, struct event
       case 'W':
       {
         struct win *oldfore = 0;
-        char *ss;
         if (display) {
           oldfore = D_fore;
           D_fore = win;
         }
-        ss = AddWindows(p, l - 1, (*s == 'w' ? 0 : 1) |
+        AddWindows(p, l - 1, (*s == 'w' ? 0 : 1) |
              (longflg ? 0 : 2) | (plusflg ? 4 : 0) |
              (minusflg ? 8 : 0), win ? win->w_number : -1);
         if (display)
@@ -2754,6 +2771,18 @@ char *MakeWinMsgEv(char *str, struct win *win, int esc, int padlen, struct event
       }
       p += strlen(p) - 1;
       break;
+
+#ifdef ENCODINGS
+    case 'e':
+      *p = 0;
+      D_encoding = nwin_options.encoding > 0 ? nwin_options.encoding : 0;
+      if (win && win->w_encoding) {
+        *p++ = ' ';
+        strcpy(p, EncodingName(win->w_encoding));
+      }
+      p += strlen(p) - 1;
+      break;
+#endif
 
     case '{':
     {
@@ -3004,7 +3033,7 @@ char *MakeWinMsgEv(char *str, struct win *win, int esc, int padlen, struct event
     else
       now.tv_sec += tick - (now.tv_sec % tick);
     ev->timeout = now;
-    debug2("NEW timeout %d %d\n", ev->timeout.tv_sec, tick);
+    debug2("NEW timeout %ld %d\n", (long)ev->timeout.tv_sec, tick);
   }
   return winmsg_buf;
 }
@@ -3292,7 +3321,7 @@ static void serv_select_fn(struct event *ev, char *data)
   for (display = displays; display; display = display->d_next) {
     if (D_status == STATUS_ON_WIN || D_cvlist == 0 || D_cvlist->c_next == 0)
       continue;
-    debug1("serv_select_fn: Restore on cv %#x\n", (int)D_forecv);
+    debug1("serv_select_fn: Restore on cv %#lx\n", (long)D_forecv);
     CV_CALL(D_forecv, LayRestore();LaySetCursor());
   }
 }

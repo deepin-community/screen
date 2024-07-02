@@ -9,7 +9,7 @@ Description: Patch to make 4.2.1 compatible with Debian's 4.1.0 and
  werew in use in Debian before (and seemed to be large enough for use
  in Debian).
 Author: Axel Beckert <abe@debian.org>
-Forwarded: no
+Forwarded: not-needed
 
 --- a/os.h
 +++ b/os.h

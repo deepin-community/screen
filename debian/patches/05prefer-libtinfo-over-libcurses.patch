@@ -13,23 +13,33 @@ dependency on systems where ncurses is built with "--with-termlib".
 
 --- a/configure.ac
 +++ b/configure.ac
-@@ -626,6 +626,9 @@
- AC_CHECKING(for tgetent)
- AC_TRY_LINK(,tgetent((char *)0, (char *)0);,,
+@@ -669,6 +669,14 @@
+     tgetent((char *)0, (char *)0);
+ ],,
  olibs="$LIBS"
 +LIBS="-ltinfo $olibs"
 +AC_CHECKING(libtinfo)
-+AC_TRY_LINK(,tgetent((char *)0, (char *)0);,,
++AC_TRY_LINK([
++    #include <curses.h>
++    #include <term.h>
++],[
++    tgetent((char *)0, (char *)0);
++],,
  LIBS="-lcurses $olibs"
  AC_CHECKING(libcurses)
- AC_TRY_LINK(,[
-@@ -650,9 +653,6 @@
- LIBS="-lncurses $olibs"
- AC_CHECKING(libncurses)
- AC_TRY_LINK(,tgetent((char *)0, (char *)0);,,
+ AC_TRY_LINK([
+@@ -718,14 +726,6 @@
+ AC_TRY_LINK([
+     #include <curses.h>
+     #include <term.h>
+-],[
+-    tgetent((char *)0, (char *)0);
+-],,
 -LIBS="-ltinfo $olibs"
 -AC_CHECKING(libtinfo)
--AC_TRY_LINK(,tgetent((char *)0, (char *)0);,,
- AC_MSG_ERROR(!!! no tgetent - no screen)))))))))
- 
- AC_TRY_RUN([
+-AC_TRY_LINK([
+-    #include <curses.h>
+-    #include <term.h>
+ ],[
+     tgetent((char *)0, (char *)0);
+ ],,

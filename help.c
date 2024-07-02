@@ -111,8 +111,9 @@ void exit_with_usage(char *myname, char *message, char *arg)
     printf("\nError: ");
     printf(message, arg);
     printf("\n");
+    exit(1);
   }
-  exit(1);
+  exit(0);
 }
 
 /* Here come the help page routines */
@@ -263,7 +264,7 @@ static void HelpAbort() {
 static int helppage() {
   struct helpdata *helpdata;
   int col, crow, n, key, x;
-  char buf[MAXKLEN], Esc_buf[5], cbuf[256];
+  char buf[MAXKLEN], Esc_buf[6], cbuf[MAXKLEN + 50];
   struct action *ktabp;
 
   helpdata = (struct helpdata *)flayer->l_data;
@@ -468,7 +469,7 @@ static const char cpmsg[] = "\
 \n\
 GNU Screen version %v\n\
 \n\
-Copyright (c) 2018-2020 Alexander Naumov, Amadeusz Slawinski\n\
+Copyright (c) 2018-2023 Alexander Naumov, Amadeusz Slawinski\n\
 Copyright (c) 2015-2017 Juergen Weigert, Alexander Naumov, Amadeusz Slawinski\n\
 Copyright (c) 2010-2014 Juergen Weigert, Sadrul Habib Chowdhury\n\
 Copyright (c) 2008-2009 Juergen Weigert, Michael Schroeder, Micah Cowan, Sadrul Habib Chowdhury\n\
