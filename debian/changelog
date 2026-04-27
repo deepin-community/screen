@@ -1,4 +1,10 @@
-screen (4.9.1-1) unstable; urgency=low
+screen (4.9.1-1deepin1) unstable; urgency=medium
+
+  * Fix PTY default mode from 0622 to 0620 to prevent unauthorized access
+    to Screen PTY devices (CVE-2025-46803)
+
+ -- deepin-ci-robot <packages@deepin.org>  Tue, 28 Apr 2026 00:03:48 +0800
+
 
   * Update upstream's PGP keys to sport the currently published keys.
   * New upstream bugfix release 4.9.1.
