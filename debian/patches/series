@@ -1,4 +1,5 @@
 # 01-08: fixes to configure, altering preprocessor macros etc.
+91_CVE-2025-46803_pty_mode.patch
 05prefer-libtinfo-over-libcurses.patch
 # 10-79: "regular" code and documentation fixes
 11replace_doc_paths.patch
